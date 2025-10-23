@@ -58,12 +58,17 @@ No olvides verificar en qué directorio se encuentra el archivo Dockerfile
 
 **¿Cuántos pasos se han ejecutado?**
 # RESPONDER 
+Se ejecutaron 6 pasos (o capas) , uno por cada instrucción principal del Dockerfile: FROM, RUN, RUN, COPY, EXPOSE, y CMD.
 
 ### Inspeccionar la imagen creada
 # COMPLETAR CON UNA CAPTURA
+<img width="907" height="319" alt="image" src="https://github.com/user-attachments/assets/669bd021-f3dd-42ef-aaee-c1b7e8eedb9e" />
 
 **Modificar el archivo index.html para incluir su nombre y luego crear una nueva versión de la imagen anterior**
 **¿Cuántos pasos se han ejecutado? ¿Observa algo diferente en la creación de la imagen**
+Se ejecutaraon de forma completa 3 pasos (el 4, 5 y 6) y se reutilizan 3 pasos (el 1, 2 y 3).
+
+Docker reutiliza el caché de las primeras instrucciones (FROM, RUN yum update, RUN yum install httpd) porque no han cambiado. En la salida, vemos la palabra "Using cache" para los pasos 1, 2 y 3. El paso 4 (COPY) se ejecuta completamente porque el archivo web/index.html que estaba copiando ha sido modificado, invalidando el caché en ese punto.
 
 ## Mecanismo de caché
 Docker usa un mecanismo de caché cuando crea imágenes para acelerar el proceso de construcción y evitar la repetición de pasos que no han cambiado. Cada instrucción en un Dockerfile crea una capa en la imagen final. Docker intenta reutilizar las capas de una construcción anterior si no han cambiado, lo que reduce significativamente el tiempo de construcción.
@@ -75,14 +80,16 @@ Docker usa un mecanismo de caché cuando crea imágenes para acelerar el proceso
 
 ### Crear un contenedor a partir de las imagen creada, mapear todos los puertos
 ```
-
+<img width="1045" height="61" alt="image" src="https://github.com/user-attachments/assets/89b62d87-755c-4f0d-a263-e9215b0c84c7" />
 ```
 
 ### ¿Con que puerto host se está realizando el mapeo?
 # COMPLETAR CON LA RESPUESTA
+El mapeo se está realizando con un puerto aleatorio y dinámico en la máquina host. Para saber el número exacto, se debe ejecutar el comando docker port apache-v2 80/tcp, lo que nos dio que estamos usando el puerto 0.0.0.0:32768
 
 **¿Qué es una imagen huérfana?**
 # COMPLETAR CON LA RESPUESTA
+Una imagen huérfana (o dangling image) es una imagen que no está etiquetada (no tiene un nombre ni una etiqueta/tag asociado) y no está siendo utilizada por ningún contenedor. Esto ocurre a menudo cuando se construye una nueva imagen con la misma etiqueta que una imagen anterior; la imagen anterior pierde su etiqueta y se convierte en huérfana.
 
 ### Identificar imágenes huérfanas
 ```
